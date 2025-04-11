@@ -30,16 +30,20 @@ class CreatePoll extends Component
 
     public function createPoll()
     {
-        $poll = Poll::create([
+        Poll::create([
             'title' => $this->title   //create poll with title
-        ]);
+        ])->options()->createMany( //create options for poll
+            collect($this->options)
+            ->map(fn($option)=>['name'=>$option]) //
+            ->all()
+        );
 
-        foreach($this->options as $optionName)
-        {
-            $poll->options()->create([
-                'name' => $optionName  //create options for poll
-            ]);
-        }
+        // foreach($this->options as $optionName)
+        // {
+        //     $poll->options()->create([
+        //         'name' => $optionName  //create options for poll
+        //     ]);
+        // }
 
         $this->reset(['title', 'options']);  //reset the form fields
     }
